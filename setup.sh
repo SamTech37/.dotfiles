@@ -5,5 +5,5 @@
 apt install -y chewing-editor
 
 # read dconf settings
-dconf load /org/gnome/shell < dconf-settings.ini
+dconf load /org/gnome/shell/ < dconf-settings.ini
 
