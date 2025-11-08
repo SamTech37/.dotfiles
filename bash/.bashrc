@@ -121,7 +121,8 @@ fi
 # autojump
 . /usr/share/autojump/autojump.sh
 
-
+# cargo
+. "$HOME/.cargo/env"
 
 # starship terminal prompt
 eval "$(starship init bash)"
@@ -130,7 +131,4 @@ eval "$(starship init bash)"
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   exec tmux new-session -A -s main
 fi
-
-
-
 

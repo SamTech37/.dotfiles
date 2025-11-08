@@ -2,7 +2,7 @@
 
 
 # get your favorite tools
-apt install -y chewing-editor
+apt install -y chewing-editor autojump
 
 # read dconf settings
 dconf load /org/gnome/shell/ < dconf-settings.ini
