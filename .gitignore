@@ -1,0 +1,31 @@
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local machine-specific configs (if any)
+local.conf
+*.local
+
+# Secrets and credentials
+*.secret
+.env
+credentials
+
+# Logs
+*.log
