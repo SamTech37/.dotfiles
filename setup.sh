@@ -7,7 +7,6 @@ APT_PACKAGES=(
     stow
     autojump
     ffmpeg
-    chewing-editor
 )
 
 STOW_DIRS=(
@@ -20,11 +19,11 @@ DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executin
 
 # ======= Script =======
 
-sudo apt install -y "${APT_PACKAGES[@]}"
 
 # Get your favorite tools via Distro's package manager
 echo "Installing packages..."
-sudo apt install -y ${APT_PACKAGES[@]}
+sudo apt update
+sudo apt install -y "${APT_PACKAGES[@]}"
 
 
 
@@ -48,16 +47,11 @@ for package in "${STOW_DIRS[@]}"; do
     fi
 done
 
-
-
 # Check if .stowrc exists
 if [ ! -f .stowrc ]; then
     echo "ERROR: .stowrc not found"
     exit 1
 fi
-
-
-
 
 # Stow packages
 echo "Stowing dotfiles..."
@@ -69,11 +63,5 @@ for package in ${STOW_DIRS[@]}; do
         echo "Warning: Package directory '$package' does not exist, skipping."
     fi
 done
-
-# Read dconf settings for GNOME
-if [ -f desktop/gnome/dconf-settings.ini ]; then
-    echo "Loading GNOME settings..."
-    dconf load /org/gnome/shell/ < desktop/gnome/dconf-settings.ini
-fi
 
 echo "Setup complete!"
