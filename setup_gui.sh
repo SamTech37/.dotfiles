@@ -6,6 +6,7 @@ set -e
 APT_PACKAGES=(
     chewing-editor
     dconf-cli
+    dconf-editor
     gnome-tweaks
     gnome-shell-extensions
     gnome-shell-extension-prefs

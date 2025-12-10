@@ -7,6 +7,13 @@ APT_PACKAGES=(
     stow
     autojump
     ffmpeg
+    git
+    curl
+    tmux
+    flatpak
+    vlc
+    gcc
+    build-essential
 )
 
 STOW_DIRS=(
@@ -19,11 +26,23 @@ DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executin
 
 # ======= Script =======
 
+# some runtime and independent installers
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh # rust and cargo
+
+source $HOME/.cargo/env
+
+cargo install tlrc --locked # tlrc, rust client for tldr.pages 
+
+
+curl -sS https://starship.rs/install.sh | sh # starship prompt
+
+
 
 # Get your favorite tools via Distro's package manager
 echo "Installing packages..."
 sudo apt update
 sudo apt install -y "${APT_PACKAGES[@]}"
+
 
 
 
