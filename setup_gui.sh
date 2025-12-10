@@ -13,6 +13,15 @@ APT_PACKAGES=(
     flatpak
 )
 
+
+GNOME_EXTENSIONS=(
+    https://extensions.gnome.org/extension/5090/space-bar/
+    https://extensions.gnome.org/extension/973/switcher/
+    https://extensions.gnome.org/extension/3843/just-perfection/
+    https://extensions.gnome.org/extension/4839/clipboard-history/
+    https://extensions.gnome.org/extension/4548/tactile/
+)
+
 # ======= Script =======
 
 
