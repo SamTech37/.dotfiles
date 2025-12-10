@@ -10,6 +10,7 @@ APT_PACKAGES=(
     gnome-tweaks
     gnome-shell-extensions
     gnome-shell-extension-prefs
+    flatpak
 )
 
 # ======= Script =======
@@ -17,6 +18,13 @@ APT_PACKAGES=(
 
 echo "Installing packages..."
 sudo apt install -y "${APT_PACKAGES[@]}"
+
+
+# get gnome-extension-manager via flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.mattjakeman.ExtensionManager
+# [TODO] find a way to install extensions via command line instead of manual
+
 
 # Read dconf settings for GNOME Shell
 if [ -f desktop/gnome/dconf-shell.ini ]; then

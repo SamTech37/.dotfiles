@@ -14,6 +14,7 @@ APT_PACKAGES=(
     vlc
     gcc
     build-essential
+    wl-clipboard
 )
 
 STOW_DIRS=(

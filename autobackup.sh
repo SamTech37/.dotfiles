@@ -31,3 +31,8 @@ dconf dump /org/gnome/desktop/ | sed \
 echo "Done. Sensitive data filtered."
 
 # check and then git add/commit/push if everthing is ok
+
+
+
+# [TODO] how to dump all the gnome extensions so as to avoid manual reinstallation later
+# the settings are synced already, that's nice
