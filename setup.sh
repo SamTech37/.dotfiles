@@ -2,6 +2,15 @@
 
 set -e
 
+# [TODO]
+# installer part requires root privileges, while stow and config part doesn't
+# perhaps split into two scripts with sudo only for the installer part
+# [TODO]
+# add a options Q&A section at the start to let user choose what to install/configure
+# then proceed accordingly without anymore prompts
+# [TODO]
+# Compartmentalize
+
 # ======= Configuration =======
 APT_PACKAGES=(
     stow
@@ -15,6 +24,7 @@ APT_PACKAGES=(
     gcc
     build-essential
     wl-clipboard
+    btop    
 )
 
 STOW_DIRS=(
@@ -25,18 +35,31 @@ STOW_DIRS=(
 
 DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executing them
 
+SAY_YES="-s -- -y"
+
 # ======= Script =======
 
-# some runtime and independent installers
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh # rust and cargo
-
+# some runtime
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh $SAY_YES # rust and cargo
 source $HOME/.cargo/env
+
+
+#node, conda, jvm and such, to be added
+
+
+
+# independent installers
 
 cargo install tlrc --locked # tlrc, rust client for tldr.pages 
 
+curl -sS https://starship.rs/install.sh | sh $SAY_YES # starship prompt
 
-curl -sS https://starship.rs/install.sh | sh # starship prompt
-
+    
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    sudo install lazygit -D -t /usr/local/bin/ # lazygit
+    lazygit --version & rm lazygit lazygit.tar.gz
 
 
 # Get your favorite tools via Distro's package manager
