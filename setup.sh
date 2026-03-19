@@ -29,6 +29,8 @@ APT_PACKAGES=(
     wl-clipboard
     btop    
     net-tools
+    python-is-python3
+    pip
 )
 
 STOW_DIRS=(
