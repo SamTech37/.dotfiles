@@ -76,8 +76,9 @@ LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/re
     lazygit --version & rm lazygit lazygit.tar.gz
 
 
-curl -fsSL https://fnm.vercel.app/install | bash
 
+# Keep shell startup files managed by dotfiles modules only.
+curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
 
 
 # Backup existing dotfiles if they exist

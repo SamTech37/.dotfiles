@@ -7,3 +7,9 @@ My personal dotfiles for Linux (Ubuntu/GNOME) development environment.
 ```
 bash setup.sh
 ```
+
+If on desktop with GUI:
+
+```
+bash setup_gui.sh
+```
