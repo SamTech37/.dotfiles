@@ -2,6 +2,9 @@
 
 set -e
 
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 # [TODO]
 # installer part requires root privileges, while stow and config part doesn't
 # perhaps split into two scripts with sudo only for the installer part
@@ -25,6 +28,7 @@ APT_PACKAGES=(
     build-essential
     wl-clipboard
     btop    
+    net-tools
 )
 
 STOW_DIRS=(
@@ -37,7 +41,17 @@ DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executin
 
 SAY_YES="-s -- -y"
 
-# ======= Script =======
+# ======= Main Script =======
+
+
+# Get your favorite tools via Distro's package manager
+echo "Installing packages..."
+sudo apt update
+sudo apt install -y "${APT_PACKAGES[@]}"
+
+
+
+
 
 # some runtime
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh $SAY_YES # rust and cargo
@@ -63,12 +77,6 @@ LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/re
 
 
 curl -fsSL https://fnm.vercel.app/install | bash
-
-# Get your favorite tools via Distro's package manager
-echo "Installing packages..."
-sudo apt update
-sudo apt install -y "${APT_PACKAGES[@]}"
-
 
 
 
@@ -97,6 +105,20 @@ if [ ! -f .stowrc ]; then
     echo "ERROR: .stowrc not found"
     exit 1
 fi
+
+# Clean existing managed symlinks first so reruns are idempotent even after
+# a previous stow from the wrong directory.
+echo "Cleaning previous stow links..."
+for package in "${STOW_DIRS[@]}"; do
+    if [ -d "$package" ]; then
+        find "$package" -type f | while read -r file; do
+            target_file=~/${file#*/}
+            if [ -L "$target_file" ]; then
+                rm "$target_file"
+            fi
+        done
+    fi
+done
 
 # Stow packages
 echo "Stowing dotfiles..."
