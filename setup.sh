@@ -31,6 +31,9 @@ APT_PACKAGES=(
     net-tools
     python-is-python3
     pip
+    subversion
+    jq
+    qbittorrent
 )
 
 STOW_DIRS=(

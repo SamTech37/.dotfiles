@@ -5,6 +5,9 @@ set -e
 # ======= Configuration =======
 APT_PACKAGES=(
     chewing-editor
+    fcitx5
+    fcitx5-frontend-gtk4 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fcitx5-frontend-qt5
+    fcitx5-chewing
     dconf-cli
     dconf-editor
     gnome-tweaks
