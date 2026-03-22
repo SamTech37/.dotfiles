@@ -5,15 +5,6 @@ set -e
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# [TODO]
-# installer part requires root privileges, while stow and config part doesn't
-# perhaps split into two scripts with sudo only for the installer part
-# [TODO]
-# add a options Q&A section at the start to let user choose what to install/configure
-# then proceed accordingly without anymore prompts
-# [TODO]
-# Compartmentalize
-
 # ======= Configuration =======
 APT_PACKAGES=(
     stow
