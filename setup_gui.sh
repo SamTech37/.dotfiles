@@ -18,24 +18,45 @@ APT_PACKAGES=(
 
 
 GNOME_EXTENSIONS=(
-    https://extensions.gnome.org/extension/5090/space-bar/
-    https://extensions.gnome.org/extension/973/switcher/
-    https://extensions.gnome.org/extension/3843/just-perfection/
-    https://extensions.gnome.org/extension/4839/clipboard-history/
-    https://extensions.gnome.org/extension/4548/tactile/
+    5090  # Space Bar
+    973   # Switcher
+    3843  # Just Perfection
+    4839  # Clipboard History
+    4548  # Tactile
+    517   # Caffeine
 )
 
 # ======= Script =======
+
+install_gnome_extension() {
+    local ext_id="$1"
+    local gnome_version
+    gnome_version=$(gnome-shell --version | awk '{print $3}' | cut -d. -f1)
+
+    echo "Installing GNOME extension ID: ${ext_id}..."
+    local info
+    info=$(curl -fsSL "https://extensions.gnome.org/extension-info/?pk=${ext_id}&shell_version=${gnome_version}")
+    local download_url
+    download_url=$(echo "$info" | python3 -c "import sys,json; print(json.load(sys.stdin)['download_url'])")
+
+    curl -fsSL "https://extensions.gnome.org${download_url}" -o "/tmp/gnome-ext-${ext_id}.zip"
+    gnome-extensions install --force "/tmp/gnome-ext-${ext_id}.zip"
+    rm -f "/tmp/gnome-ext-${ext_id}.zip"
+}
 
 
 echo "Installing packages..."
 sudo apt install -y "${APT_PACKAGES[@]}"
 
 
-# get gnome-extension-manager via flatpak
+echo "Installing GNOME extensions..."
+for ext_id in "${GNOME_EXTENSIONS[@]}"; do
+    install_gnome_extension "$ext_id"
+done
+
+# get gnome-extension-manager via flatpak (GUI tool for browsing/updating extensions)
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub com.mattjakeman.ExtensionManager
-# [TODO] find a way to install extensions via command line instead of manual
 
 
 # Read dconf settings for GNOME Shell
@@ -44,7 +65,7 @@ if [ -f desktop/gnome/dconf-shell.ini ]; then
     dconf load /org/gnome/shell/ < desktop/gnome/dconf-shell.ini
 else
     echo "[WARNING] 'desktop/gnome/dconf-shell.ini' not found. Skipping Shell settings."
-fi 
+fi
 
 # Read dconf settings for GNOME Desktop
 if [ -f desktop/gnome/dconf-desktop.ini ]; then
@@ -55,3 +76,4 @@ else
 fi
 
 echo "Setup GUI complete!"
+echo "[NOTE] Some changes (GNOME extensions, input method) will take effect after re-login or reboot."
