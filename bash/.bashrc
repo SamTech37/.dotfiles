@@ -41,10 +41,11 @@ if [ -d ~/.config/bash ]; then
                 [ "$BASH_DEBUG" = "1" ] && echo "[bash] loaded: $f"
             else
                 _bash_all_ok=0
-                echo "[bash] ERROR loading: $f — $(cat /tmp/bash_module_err)"
+                [ "$BASH_DEBUG" = "1" ] && echo "[bash] ERROR loading: $f — $(cat /tmp/bash_module_err)"
             fi
         fi
     done
-    [ "$_bash_all_ok" = "1" ] && [ "$BASH_DEBUG" = "0" ] && echo "[bash] all modules loaded"
+    [ "$_bash_all_ok" = "1" ] && [ "$BASH_DEBUG" = "1" ] && echo "[bash] all modules loaded"
     unset _bash_all_ok
 fi
+. "$HOME/.cargo/env"

@@ -14,6 +14,7 @@ APT_PACKAGES=(
     curl
     tmux
     flatpak
+    tree
     vlc
     gcc
     build-essential
@@ -31,6 +32,7 @@ STOW_DIRS=(
     bash
     starship
     tmux
+    vlc
 )
 
 DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executing them
@@ -127,5 +129,6 @@ for package in ${STOW_DIRS[@]}; do
         echo "Warning: Package directory '$package' does not exist, skipping."
     fi
 done
+
 
 echo "Setup complete!"
