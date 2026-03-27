@@ -90,7 +90,11 @@ for package in "${STOW_DIRS[@]}"; do
         find "$package" -type f | while read -r file; do
             # Remove package name prefix to get target path
             target_file=~/${file#*/}
-            if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then
+            # Resolve the real path to guard against stow-folded directory symlinks:
+            # if ~/.config/bash/ is a symlink back into the dotfiles repo, the files
+            # under it are not real targets — they ARE the source files.
+            real_path=$(realpath "$target_file" 2>/dev/null)
+            if [ -f "$target_file" ] && [ ! -L "$target_file" ] && [[ "$real_path" != "$SCRIPT_DIR"* ]]; then
                 mkdir -p "$backup_dir/$(dirname "${file#*/}")"
                 cp "$target_file" "$backup_dir/${file#*/}"
                 rm "$target_file"
