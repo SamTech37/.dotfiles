@@ -75,5 +75,12 @@ else
     echo "[WARNING] 'desktop/gnome/dconf-desktop.ini' not found. Skipping Desktop settings."
 fi
 
+# Install custom .desktop files
+echo "Installing custom .desktop files..."
+mkdir -p "$HOME/.local/share/applications"
+for f in desktop/applications/*.desktop; do
+    sed "s|__HOME__|$HOME|g" "$f" > "$HOME/.local/share/applications/$(basename "$f")"
+done
+
 echo "Setup GUI complete!"
 echo "[NOTE] Some changes (GNOME extensions, input method) will take effect after re-login or reboot."
