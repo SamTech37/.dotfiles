@@ -1,7 +1,8 @@
 # tmux startup policy:
 # - Terminal at $HOME: attach to session "main"
 # - Terminal in specific directory (e.g. Nautilus "Open in Terminal"): create a new window at $PWD and attach
-if command -v tmux >/dev/null 2>&1 && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+# - VSCode: excluded here, handled via terminal.integrated.profiles.linux in VSCode settings.json natively
+if command -v tmux >/dev/null 2>&1 && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ] && [ -z "$VSCODE_PID" ]; then
   TMUX_SESSION="main"
   tmux has-session -t "$TMUX_SESSION" 2>/dev/null || tmux new-session -d -s "$TMUX_SESSION" -c "$HOME"
 

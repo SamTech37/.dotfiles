@@ -11,6 +11,7 @@ APT_PACKAGES=(
     autojump
     ffmpeg
     git
+    git-extras
     curl
     tmux
     flatpak
