@@ -34,6 +34,7 @@ STOW_DIRS=(
     starship
     tmux
     vlc
+    .claude
 )
 
 DEBUG_STOW="" # Set to "--simulate" to simulate stow actions instead of executing them

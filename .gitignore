@@ -33,6 +33,13 @@ id_ed25519
 authorized_keys
 known_hosts
 
+# Claude Code — allowlist: ignore everything except explicitly tracked files
+.claude/**
+!.claude/settings.json
+!.claude/CLAUDE.md
+!.claude/keybindings.json
+!.claude/statusline-command.sh
+
 # Logs
 *.log
 
