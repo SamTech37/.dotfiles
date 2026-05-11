@@ -21,6 +21,7 @@ Thumbs.db
 # Local machine-specific configs (if any)
 local.conf
 *.local
+*.py[cod]
 
 # Secrets and credentials
 *.secret
@@ -33,12 +34,12 @@ id_ed25519
 authorized_keys
 known_hosts
 
-# Claude Code — allowlist: ignore everything except explicitly tracked files
-.claude/**
-!.claude/settings.json
-!.claude/CLAUDE.md
-!.claude/keybindings.json
-!.claude/statusline-command.sh
+# Claude Code — allowlist: ignore sensitive/ephemeral files, keep only config
+claude/.claude/**
+!claude/.claude/settings.json
+!claude/.claude/CLAUDE.md
+!claude/.claude/keybindings.json
+!claude/.claude/statusline-command.sh
 
 # Logs
 *.log
