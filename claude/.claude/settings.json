@@ -33,5 +33,6 @@
     "command": "bash ~/.claude/statusline-command.sh"
   },
   "effortLevel": "high",
-  "advisorModel": "opus"
+  "advisorModel": "opus",
+  "model": "opus"
 }

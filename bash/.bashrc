@@ -49,3 +49,5 @@ if [ -d ~/.config/bash ]; then
     unset _bash_all_ok
 fi
 . "$HOME/.cargo/env"
+export PATH=$HOME/.local/bin:$PATH
+export PATH=/usr/local/go/bin:$HOME/go/bin:$PATH
