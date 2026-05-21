@@ -20,6 +20,7 @@ APT_PACKAGES=(
     gcc
     build-essential
     wl-clipboard
+    htop
     btop    
     net-tools
     python-is-python3

@@ -15,6 +15,7 @@
       "WebSearch(*)"
     ]
   },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -34,5 +35,5 @@
   },
   "effortLevel": "high",
   "advisorModel": "opus",
-  "model": "opus"
+  "theme": "dark"
 }
