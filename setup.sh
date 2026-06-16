@@ -131,7 +131,19 @@ echo "Stowing dotfiles..."
 for package in ${STOW_DIRS[@]}; do
     if [ -d "$package" ]; then
         echo "Stowing package: $package"
-        stow "$DEBUG_STOW" --verbose --restow  "$package" #target is already set in .stowrc
+        
+        # Pre-create all needed directories to prevent GNU stow from "folding" 
+        # symlinking the parent directory itself instead of the files inside it
+        find "$package" -type d -mindepth 1 | while read -r dir; do
+            target_dir=~/"${dir#*/}"
+            if [ ! -d "$target_dir" ] && [ ! -L "$target_dir" ]; then
+                mkdir -p "$target_dir"
+            fi
+        done
+
+    # Prefer an explicit target using $HOME so stow doesn't rely on ~ in .stowrc
+    # DEBUG_STOW may be "--simulate" for dry runs
+    stow $DEBUG_STOW --target "$HOME" --verbose --restow "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
     else
         echo "Warning: Package directory '$package' does not exist, skipping."
     fi
