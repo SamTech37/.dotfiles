@@ -27,13 +27,55 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'n=\"$(command -v node)\"; [ -z \"$n\" ] && n=\"$(ls -d \"$HOME\"/.local/share/fnm/node-versions/*/installation/bin/node 2>/dev/null | sort -V | tail -1)\"; exec \"$n\" \"$HOME/.claude/hooks/caveman-activate.js\"'",
+            "timeout": 5,
+            "statusMessage": "Loading caveman mode..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'n=\"$(command -v node)\"; [ -z \"$n\" ] && n=\"$(ls -d \"$HOME\"/.local/share/fnm/node-versions/*/installation/bin/node 2>/dev/null | sort -V | tail -1)\"; exec \"$n\" \"$HOME/.claude/hooks/caveman-mode-tracker.js\"'",
+            "timeout": 5,
+            "statusMessage": "Tracking caveman mode..."
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
   },
+  "enabledPlugins": {
+    "caveman@caveman": true,
+    "ponytail@ponytail": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
   "effortLevel": "high",
-  "advisorModel": "opus",
+  "tui": "default",
   "theme": "dark"
 }
