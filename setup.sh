@@ -5,6 +5,11 @@ set -e
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+if [ "$EUID" -eq 0 ]; then
+    echo "ERROR: do not run as root. Run as your normal user; the script will sudo when needed."
+    exit 1
+fi
+
 # ======= Configuration =======
 APT_PACKAGES=(
     stow
@@ -84,7 +89,7 @@ curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
 
 # Backup existing dotfiles if they exist
 echo "Backing up existing dotfiles..."
-backup_dir=~/backup-dotfiles-$(date +%Y%m%d-%H%M%S)
+backup_dir="$HOME/backup-dotfiles-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup_dir"
 
 # Find all files in stow packages and backup conflicting ones
@@ -92,7 +97,7 @@ for package in "${STOW_DIRS[@]}"; do
     if [ -d "$package" ]; then
         find "$package" -type f | while read -r file; do
             # Remove package name prefix to get target path
-            target_file=~/${file#*/}
+            target_file="$HOME/${file#*/}"
             # Resolve the real path to guard against stow-folded directory symlinks:
             # if ~/.config/bash/ is a symlink back into the dotfiles repo, the files
             # under it are not real targets — they ARE the source files.
@@ -112,15 +117,26 @@ if [ ! -f .stowrc ]; then
     exit 1
 fi
 
-# Clean existing managed symlinks first so reruns are idempotent even after
-# a previous stow from the wrong directory.
+# Clean existing managed symlinks and stow-folded directory symlinks so reruns
+# are idempotent even after a previous stow from the wrong directory.
 echo "Cleaning previous stow links..."
 for package in "${STOW_DIRS[@]}"; do
     if [ -d "$package" ]; then
+        # Remove per-file symlinks
         find "$package" -type f | while read -r file; do
-            target_file=~/${file#*/}
+            target_file="$HOME/${file#*/}"
             if [ -L "$target_file" ]; then
                 rm "$target_file"
+            fi
+        done
+        # Remove stow-folded directory symlinks pointing back into the repo
+        find "$package" -type d -mindepth 1 | while read -r dir; do
+            target_dir="$HOME/${dir#*/}"
+            if [ -L "$target_dir" ]; then
+                real_dir=$(realpath "$target_dir" 2>/dev/null)
+                if [[ "$real_dir" == "$SCRIPT_DIR"* ]]; then
+                    rm "$target_dir"
+                fi
             fi
         done
     fi
@@ -128,22 +144,22 @@ done
 
 # Stow packages
 echo "Stowing dotfiles..."
-for package in ${STOW_DIRS[@]}; do
+for package in "${STOW_DIRS[@]}"; do
     if [ -d "$package" ]; then
         echo "Stowing package: $package"
-        
-        # Pre-create all needed directories to prevent GNU stow from "folding" 
-        # symlinking the parent directory itself instead of the files inside it
+
+        # Pre-create all needed directories so stow uses per-file symlinks
+        # (prevents "folding" where stow symlinks the whole directory instead)
         find "$package" -type d -mindepth 1 | while read -r dir; do
-            target_dir=~/"${dir#*/}"
-            if [ ! -d "$target_dir" ] && [ ! -L "$target_dir" ]; then
+            target_dir="$HOME/${dir#*/}"
+            if [ ! -d "$target_dir" ]; then
                 mkdir -p "$target_dir"
             fi
         done
 
-    # Prefer an explicit target using $HOME so stow doesn't rely on ~ in .stowrc
-    # DEBUG_STOW may be "--simulate" for dry runs
-    stow $DEBUG_STOW --target "$HOME" --verbose --restow "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
+        # --no-folding: always create per-file symlinks, never directory symlinks
+        stow $DEBUG_STOW --no-folding --target "$HOME" --verbose --restow "$package" \
+            2>&1 | grep -v "BUG in find_stowed_path" || true
     else
         echo "Warning: Package directory '$package' does not exist, skipping."
     fi

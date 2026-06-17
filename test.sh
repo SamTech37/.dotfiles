@@ -43,6 +43,7 @@ for pkg in "${STOW_DIRS[@]}"; do
         target="$HOME/$rel"
 
         if [ -L "$target" ]; then
+            # Per-file symlink (preferred stow mode)
             real=$(symlink_target "$target")
             if [ "$real" = "$src" ]; then
                 pass "$pkg: $rel"
@@ -50,7 +51,14 @@ for pkg in "${STOW_DIRS[@]}"; do
                 fail "$pkg: $rel → wrong target ($real)"
             fi
         elif [ -e "$target" ]; then
-            fail "$pkg: $rel → real file in \$HOME (not a symlink — stow not run?)"
+            # File exists but isn't a symlink itself — check if it's reachable via
+            # a stow-folded directory symlink pointing back into the repo.
+            real=$(symlink_target "$target")
+            if [ "$real" = "$src" ]; then
+                fail "$pkg: $rel → dir symlink (stow-folded — run setup.sh to fix)"
+            else
+                fail "$pkg: $rel → real file in \$HOME (not a symlink — stow not run?)"
+            fi
         else
             fail "$pkg: $rel → missing from \$HOME"
         fi
@@ -86,7 +94,7 @@ for f in "$HOME/.config/bash/"*.sh; do
     pass "syntax: $rel"
 
     # Source in an isolated subshell so failures don't affect us.
-    if (set +e; source "$f" >/dev/null 2>&1); then
+    if (set +eu; source "$f" >/dev/null 2>&1); then
         pass "sources: $rel"
     else
         warn "sources: $rel — errors on source (tool may not be installed)"
