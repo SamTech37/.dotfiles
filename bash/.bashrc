@@ -35,18 +35,19 @@ BASH_DEBUG=${BASH_DEBUG:-0}
 
 if [ -d ~/.config/bash ]; then
     _bash_all_ok=1
+    _bash_err=$(mktemp)
     for f in ~/.config/bash/*.sh; do
         if [ -f "$f" ]; then
-            if . "$f" 2>/tmp/bash_module_err; then
+            if . "$f" 2>"$_bash_err"; then
                 [ "$BASH_DEBUG" = "1" ] && echo "[bash] loaded: $f"
             else
                 _bash_all_ok=0
-                [ "$BASH_DEBUG" = "1" ] && echo "[bash] ERROR loading: $f — $(cat /tmp/bash_module_err)"
+                [ "$BASH_DEBUG" = "1" ] && echo "[bash] ERROR loading: $f — $(cat "$_bash_err")"
             fi
         fi
     done
     [ "$_bash_all_ok" = "1" ] && [ "$BASH_DEBUG" = "1" ] && echo "[bash] all modules loaded"
-    unset _bash_all_ok
+    unset _bash_all_ok; rm -f "$_bash_err"; unset _bash_err
 fi
 . "$HOME/.cargo/env"
 export PATH=$HOME/.local/bin:$PATH

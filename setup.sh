@@ -76,7 +76,10 @@ curl -sS https://starship.rs/install.sh | sh $SAY_YES # starship prompt
 
     
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz"
+    expected=$(curl -sL "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/checksums.txt" \
+        | grep "linux_x86_64.tar.gz" | awk '{print $1}')
+    echo "$expected  lazygit.tar.gz" | sha256sum -c
     tar xf lazygit.tar.gz lazygit
     sudo install lazygit -D -t /usr/local/bin/ # lazygit
     lazygit --version & rm lazygit lazygit.tar.gz
