@@ -1,23 +1,22 @@
 [battery]
-full_symbol = "• "
-charging_symbol = "⇡ "
-discharging_symbol = "⇣ "
-unknown_symbol = "❓ "
-empty_symbol = "❗ "
+full_symbol = "* "
+charging_symbol = "^ "
+discharging_symbol = "v "
+unknown_symbol = "? "
+empty_symbol = "! "
 
 [character]
-success_symbol = '[#❯](bold green)' 
-# The 'success_symbol' segment is being set to "#❯" with the color 'bold green'
-
+success_symbol = '[#>](bold green)'
+error_symbol = '[#>](bold red)'
 
 [erlang]
-symbol = "ⓔ "
+symbol = "e "
 
 [nodejs]
-symbol = "[⬢](bold green) "
+symbol = "[#](bold green) "
 
 [pulumi]
-symbol = "🧊 "
+symbol = "[P] "
 
 [typst]
 symbol = "t "
