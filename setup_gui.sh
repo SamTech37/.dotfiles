@@ -85,3 +85,4 @@ done
 
 echo "Setup GUI complete!"
 echo "[NOTE] Some changes (GNOME extensions, input method) will take effect after re-login or reboot."
+echo "[NOTE] Chewing dict: gpg -d desktop/chewing/chewing.json.gpg > ~/chewing.json (passphrase in password manager \"dotfiles: chewing.json.gpg\"), then import in chewing-editor."

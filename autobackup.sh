@@ -30,6 +30,12 @@ dconf dump /org/gnome/desktop/ | sed \
     >> desktop/gnome/dconf-desktop.ini
 
 
+# 3. Encrypt chewing phrase export (plaintext is gitignored); only when the export is newer,
+# since gpg -c output differs on every run
+if [ desktop/chewing/chewing.json -nt desktop/chewing/chewing.json.gpg ]; then
+    gpg -c --yes -o desktop/chewing/chewing.json.gpg desktop/chewing/chewing.json
+fi
+
 echo "Done. Sensitive data filtered."
 
 # check and then git add/commit/push if everthing is ok
