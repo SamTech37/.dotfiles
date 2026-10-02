@@ -24,6 +24,7 @@ GNOME_EXTENSIONS=(
     4839  # Clipboard History
     4548  # Tactile
     517   # Caffeine
+    261   # Input Method Panel (kimpanel), fcitx5 popup position on Wayland
 )
 
 # ======= Script =======
