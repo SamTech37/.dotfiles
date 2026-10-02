@@ -1,6 +1,6 @@
 # todo
 
-## Routine (monthly, or after changing GNOME/input settings)
+## Routine (every ~2 weeks, or after changing GNOME/input settings)
 
 - [ ] `bash autobackup.sh` to re-dump dconf shell + desktop settings
 - [ ] `git diff desktop/` and read what changed before committing
@@ -15,8 +15,8 @@
 - [x] uncommitted: `claude/.claude/settings.json` (+37 lines), `git/.gitconfig` (+3 lines)
 - [x] live dconf has drifted from the repo dumps: 14 changed lines under `/org/gnome/shell/`, 20 under `/org/gnome/desktop/` (Space Bar and switcher options, favorite-apps now has `com.microsoft.VSCode.desktop` instead of `code.desktop`, enabled-extensions now has `kimpanel@kde.org`)
 - [x] add Kimpanel (`kimpanel@kde.org`, ID 261) to `GNOME_EXTENSIONS`; it fixes the fcitx5 chewing candidate window showing up on the other monitor under Wayland
-- [ ] fcitx5 config is not in the repo: `~/.config/fcitx5/{config,profile,conf/}`; decide whether to stow it
+- [x] fcitx5 config: `autobackup.sh` copies `~/.config/fcitx5/{config,profile,conf/*.conf}` to `desktop/fcitx5/`, `setup_gui.sh` copies it back (copy, not stow: fcitx5 may replace symlinks on save)
 - [x] `ibus-tweaker@tuberry.github.com` is still enabled although input is fcitx5 now; keep or drop
 - [x] `GNOME_EXTENSIONS` lacks `ibus-tweaker` and `windowIsReady_Remover`, which are enabled in dconf; a fresh machine enables them in dconf but never installs them
 - [x] bug in `autobackup.sh`: the `/history=/d` sed filter also deletes `clear-history=` (the Clipboard History shortcut, `<Control><Super>c`); anchor it, e.g. `/^history=/d`
-- [ ] `autobackup.sh` ends at the comment "check and then git add/commit/push if everthing is ok"; nothing runs it on a schedule
+- [x] `autobackup.sh` scheduling: decided against; run it by hand with the routine above (output needs a human diff review, gpg may prompt)

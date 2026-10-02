@@ -36,6 +36,13 @@ if [ desktop/chewing/chewing.json -nt desktop/chewing/chewing.json.gpg ]; then
     gpg -c --yes -o desktop/chewing/chewing.json.gpg desktop/chewing/chewing.json
 fi
 
+# 4. fcitx5 config; copied, not stowed: fcitx5 may replace a symlink when it saves.
+# conf/*.conf skips conf/cached_layouts (a cache)
+# ponytail: a conf file deleted locally stays in the repo; git rm it by hand
+mkdir -p desktop/fcitx5/conf
+cp ~/.config/fcitx5/config ~/.config/fcitx5/profile desktop/fcitx5/
+cp ~/.config/fcitx5/conf/*.conf desktop/fcitx5/conf/
+
 echo "Done. Sensitive data filtered."
 
 # check and then git add/commit/push if everthing is ok

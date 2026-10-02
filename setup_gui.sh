@@ -76,6 +76,12 @@ else
     echo "[WARNING] 'desktop/gnome/dconf-desktop.ini' not found. Skipping Desktop settings."
 fi
 
+# Restore fcitx5 config (copied by autobackup.sh)
+echo "Restoring fcitx5 config..."
+mkdir -p "$HOME/.config/fcitx5/conf"
+cp desktop/fcitx5/config desktop/fcitx5/profile "$HOME/.config/fcitx5/"
+cp desktop/fcitx5/conf/*.conf "$HOME/.config/fcitx5/conf/"
+
 # Install custom .desktop files
 echo "Installing custom .desktop files..."
 mkdir -p "$HOME/.local/share/applications"
