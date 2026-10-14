@@ -135,6 +135,17 @@ else
     fail "settings.json missing from ~/.claude/"
 fi
 
+# Leak guard: Claude Code writes through the symlink into the tracked repo file.
+# Machine/project-specific keys belong in <project>/.claude/settings.local.json.
+repo_settings="$SCRIPT_DIR/claude/.claude/settings.json"
+leaked=$(jq -r 'keys[] | select(IN("autoMode", "env", "apiKeyHelper", "awsAuthRefresh", "awsCredentialExport"))' "$repo_settings" 2>/dev/null)
+[ -z "$leaked" ] \
+    && pass "settings.json: no machine-specific keys" \
+    || warn "settings.json: move to project settings.local.json — $(echo $leaked)"
+grep -qF "$HOME/" "$repo_settings" \
+    && warn "settings.json: contains absolute \$HOME path (use ~)" \
+    || pass "settings.json: no absolute \$HOME paths"
+
 statusline="$HOME/.claude/statusline-command.sh"
 [ -f "$statusline" ]    && pass "statusline-command.sh present" || fail "statusline-command.sh missing"
 [ -x "$statusline" ]    && pass "statusline-command.sh is executable" \
