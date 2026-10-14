@@ -89,6 +89,12 @@ LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/re
 # Keep shell startup files managed by dotfiles modules only.
 curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
 
+curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh # uv, installs to ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+
+# yt-dlp via uv, not apt: PPA lags behind YouTube changes. Update with `uv tool upgrade yt-dlp`.
+uv tool install --python 3.12 --force "yt-dlp[default]"
+
 
 # Backup existing dotfiles if they exist
 echo "Backing up existing dotfiles..."
